@@ -2,7 +2,7 @@
 // #include "botones.h"
 #include "claves.h"
 #include "timers.h"
-#include "config.h"
+#include "config-setup.h"
 #include <WiFi.h>
 
 // SSD1306
@@ -58,7 +58,9 @@ static const unsigned char PROGMEM logo_bmp[] =
 
 void setup() {
 
-    int configuracionSetup(115200);
+    int configuracionSetup();
+    
+    // int configuracionSetupTest();    // CODIGO DE PRUEBA
 
     // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
@@ -97,6 +99,10 @@ void setup() {
 
 void loop() {
     millisActual = millis();
+
+    // int configuracionLoop();
+
+    // int configuracionLoopTest();    // CODIGO DE PRUEBA
 
     // if (millisActual - t_WifiScan_prev >= t_WifiScan_i) {
     //     if(WiFi.status() != WL_CONNECTED) {

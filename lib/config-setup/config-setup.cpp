@@ -10,13 +10,14 @@
 Adafruit_BME280 bme; // I2C
 
 
-// Declaración de LED
-int configuracionSetup( int upload_speed ){
+// -------------------------------------------------------------------------
+// Declaración de Configuración del Setup
+int configuracionSetup(){
 
     uint8_t errorCode = 0;
 
     // CONFIGURACIÓN DE MONITOR SERIAL
-    Serial.begin(upload_speed);
+    Serial.begin(115200);
     
     // CONEXIÓN DEL WIFI
     WiFi.begin(wifiSSID, wifiPass);
@@ -36,4 +37,15 @@ int configuracionSetup( int upload_speed ){
     }
 
 return errorCode;
+}
+
+
+//-------------------------------------------------------------------------
+// CÓDIGO PARA EL SETUP DE PRUEBAS
+int configuracionSetupTest(){
+    uint8_t errorCode = 0;
+
+    
+
+    return errorCode;
 }
