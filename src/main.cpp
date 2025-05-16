@@ -1,170 +1,66 @@
 #include <Arduino.h>
-// #include "botones.h"
-#include "claves.h"
-#include "timers.h"
-#include "config-setup.h"
 #include <WiFi.h>
 
-// SSD1306
+// Bibliotecas internas
+#include "botones.h"
+#include "claves.h"
+#include "timers.h"
+#include "config-main.h"
+#include "config-test.h"
+
+// Bilioteca i2c
 #include <SPI.h>
 #include <Wire.h>
+
+// Display SSD1306
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+// Sensor BME280
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-
-
-#include <Wire.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BME280.h>
-
-
-unsigned long millisActual = 0;
-// Declaramos las variables globales que vienen de timers.h
 
 Adafruit_BME280 bme; // I2C
 
-
-
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-
-#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
-#define NUMFLAKES     10 // Number of snowflakes in the animation example
-
-#define LOGO_HEIGHT   16
-#define LOGO_WIDTH    16
-static const unsigned char PROGMEM logo_bmp[] =
-{ 0b00000000, 0b11000000,
-  0b00000001, 0b11000000,
-  0b00000001, 0b11000000,
-  0b00000011, 0b11100000,
-  0b11110011, 0b11100000,
-  0b11111110, 0b11111000,
-  0b01111110, 0b11111111,
-  0b00110011, 0b10011111,
-  0b00011111, 0b11111100,
-  0b00001101, 0b01110000,
-  0b00011011, 0b10100000,
-  0b00111111, 0b11100000,
-  0b00111111, 0b11110000,
-  0b01111100, 0b11110000,
-  0b01110000, 0b01110000,
-  0b00000000, 0b00110000 };
+bool testMode = 0;
 
 void setup() {
-
-    int configuracionSetup();
     
-    // int configuracionSetupTest();    // CODIGO DE PRUEBA
-
-    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
-  }
-
-  // Show initial display buffer contents on the screen --
-  // the library initializes this with an Adafruit splash screen.
-  display.display();
-  delay(20000); // Pause for 2 seconds
-
-  // Clear the buffer
-  display.clearDisplay();
-
-  // Draw a single pixel in white
-  display.drawPixel(10, 10, SSD1306_WHITE);
-
-  // Show the display buffer on the screen. You MUST call display() after
-  // drawing commands to make them visible on screen!
-  display.display();
-  delay(2000);
-  // display.display() is NOT necessary after every single drawing command,
-  // unless that's what you want...rather, you can batch up a bunch of
-  // drawing operations and then update the screen all at once by calling
-  // display.display(). These examples demonstrate both approaches...
-
-
-  // Invert and restore display, pausing in-between
-  display.invertDisplay(true);
-  delay(1000);
-  display.invertDisplay(false);
-  delay(1000);
-
+    // FUNCIONES POR DEFECTO
+    if (!testMode) {
+        configuracionSetup();
+    } else {
+        configuracionSetupTest();    // CODIGO DE PRUEBA
+    }
+        
 }
 
-void loop() {
-    millisActual = millis();
+void loop(){
 
-    // int configuracionLoop();
-
-    // int configuracionLoopTest();    // CODIGO DE PRUEBA
-
-    // if (millisActual - t_WifiScan_prev >= t_WifiScan_i) {
-    //     if(WiFi.status() != WL_CONNECTED) {
-    //         Serial.println("WiFi not connected!");
-    //         WiFi.begin(wifiSSID, wifiPass);
-            
-    //         if (millisActual - t_WifiShowIp_prev >= t_WifiShowIp_i) {
-    //             if(WiFi.status() == WL_CONNECTED) {
-    //                 Serial.println("[WiFi] WiFi is connected!");
-    //                 Serial.print("[WiFi] IP address: ");
-    //                 Serial.println(WiFi.localIP());   
-    //             }
-    //         }
-    //         t_WifiScan_prev = millisActual;
-
-    //     }
-    //     t_WifiScan_prev = millisActual;
-    // }
-
-    // Verificar y reconectar WiFi periódicamente
-    if (WiFi.status() != WL_CONNECTED) {
-        if (millisActual - t_WifiReconnect_prev >= t_WifiReconnect_i) {
-            Serial.println("[WiFi] Conexión perdida. Intentando reconectar...");
-            WiFi.begin(wifiSSID, wifiPass);
-
-        t_WifiReconnect_prev = millisActual; // Actualizamos el timer de reintento
-        }
-        delay(10);
-    } else {
-        
-
-        // Opcional: Podemos seguir verificando periódicamente si la conexión sigue activa
-        if (millisActual - t_WifiScan_prev >= t_WifiScan_i) {
-        t_WifiScan_prev = millisActual;
-            // Puedes agregar aquí una verificación más profunda de la conexión si es necesario
-            // (por ejemplo, intentar hacer un ping)
-        }
+    // FUNCIONES POR DEFECTO
+    if (!testMode) {
+        configuracionLoop();
+    } else {    
+        configuracionLoopTest();    // CODIGO DE PRUEBA
     }
 
+    // Serial.print("Temperatura = ");
+    // Serial.print(bme.readTemperature());
+    // Serial.println(" *C");
 
-    Serial.print("Temperatura = ");
-    Serial.print(bme.readTemperature());
-    Serial.println(" *C");
+    // Serial.print("Presión = ");
+    // Serial.print(bme.readPressure() / 100.0F);
+    // Serial.println(" hPa");
 
-    Serial.print("Presión = ");
-    Serial.print(bme.readPressure() / 100.0F);
-    Serial.println(" hPa");
+    // Serial.print("Humedad = ");
+    // Serial.print(bme.readHumidity());
+    // Serial.println(" %");
 
-    Serial.print("Humedad = ");
-    Serial.print(bme.readHumidity());
-    Serial.println(" %");
+    // Serial.print("Altitud aproximada = ");
+    // Serial.print(bme.readAltitude(1013.25)); // Ajusta según tu presión local
+    // Serial.println(" m");
 
-    Serial.print("Altitud aproximada = ");
-    Serial.print(bme.readAltitude(1013.25)); // Ajusta según tu presión local
-    Serial.println(" m");
-
-    Serial.println();
-    delay(2000);
+    // Serial.println();
+    // delay(2000);
 
 }
-
-
-
-
-

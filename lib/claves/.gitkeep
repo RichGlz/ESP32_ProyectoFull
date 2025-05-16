@@ -1,0 +1,10 @@
+/*  
+    PASOS PARA QUE FUNCIONE EL CÓDIGO
+
+    Crear un archivo "claves.cpp" en la carpeta lib/claves
+    y escribir las siguientes líneas:
+    
+    const char* wifiSSID = "Nombre de la red wifi";
+    const char* wifiPass = "Password";
+
+*/

@@ -5,4 +5,5 @@
 .vscode/ipch
 
 ## Info sensible
-lib/claves/*.*
+lib/claves/*.cpp
+!lib/claves/.gitkeep

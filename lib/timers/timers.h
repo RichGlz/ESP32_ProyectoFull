@@ -1,16 +1,17 @@
-// DEFINICIONES
-#define t_Base 0
+#ifndef TIMERS_H
+#define TIMERS_H
 
-// -------------------------------------------------------------------------
-// -------------------------- CONFIG DE TIMERS -----------------------------
-// Tiempo de escaneo de red Wifi
-unsigned long t_WifiScan_prev = 0;
-const int t_WifiScan_i = 5000;
+extern unsigned long millisActual;
+
+extern unsigned long t_WifiScan_prev;
+extern unsigned long t_WifiScan_i;
 
 // Tiempo para reconectar Wifi
-unsigned long t_WifiReconnect_prev = 0;
-const int t_WifiReconnect_i = 10000;
+extern unsigned long t_WifiReconnect_prev;
+extern unsigned long t_WifiReconnect_i;
 
 // Tiempo para mostrar IP después de conectar
-unsigned long t_WifiShowIp_prev = 0;
-const int t_WifiShowIp_i = 500;
+extern unsigned long t_WifiShowIp_prev;
+extern unsigned long t_WifiShowIp_i;
+
+#endif
